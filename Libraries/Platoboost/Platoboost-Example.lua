@@ -278,7 +278,8 @@ checkBtn.MouseButton1Click:Connect(function()
 
     local valid = verifyKey(key)
     if valid then
-        onMessage("Key is valid and activated!")
+        onMessage("Key is valid. Loading...")
+        loadstring(game:HttpGet("https://raw.githubusercontent/KitsuBogdan/..."))()
     else
         onMessage("Key is invalid or could not be activated.")
     end
