@@ -22,7 +22,7 @@ Built to simplify creating tabbed interfaces, buttons, toggles, textboxes, slide
 To install, simply require the library via HTTP GET and `require` it:
 
 ```lua
-local GuiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/KitsuBogdan/Roblox/main/Libraries/NoNameGUI/Library"))
+local GuiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/KitsuBogdan/Roblox/main/Libraries/NoNameGUI/Library.lua"))
 ````
 
 ---
