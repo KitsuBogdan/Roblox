@@ -128,8 +128,8 @@ end)
 ## 🔗 Resources
 
 * [GitHub Repository](https://github.com/KitsuBogdan/Roblox/tree/main/Libraries/NoNameGUI)
-* [Full README](../../Libraries/NoNameGUI)
-* [ChangeLog](https://github.com/KitsuBogdan/Roblox/tree/main/Libraries/NoNameGUI)
+* [Full README](https://github.com/KitsuBogdan/Roblox/tree/main/Libraries/NoNameGUI/README.md)
+* [ChangeLog](https://github.com/KitsuBogdan/Roblox/tree/main/Libraries/NoNameGUI/CHANGELOG.md)
 
 ---
 
