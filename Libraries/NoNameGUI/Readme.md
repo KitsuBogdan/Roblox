@@ -1,189 +1,66 @@
-# How to Use NoName GUI Library for Roblox
+Sure! Here's the **full, detailed `README.md`** for your Roblox GUI library with all sections included, formatted nicely in Markdown:
 
-NoName GUI Library is a lightweight and easy-to-use Roblox GUI framework that helps you create GUI windows, tabs, buttons, toggles, labels, and textboxes quickly.
+````markdown
+# NoNameGUI Library for Roblox
+
+A lightweight, modular, and easy-to-use GUI library for Roblox developers.  
+Built to simplify creating tabbed interfaces, buttons, toggles, textboxes, sliders, and more.
 
 ---
 
-## 1. Setup
+## 🌟 Features
 
-Load the library module directly from the GitHub raw URL and require it:
+- 📋 Tabbed UI (List & Table styles)
+- 🖱️ Clickable buttons with callbacks
+- ✅ Toggles with state detection
+- 🧾 Textboxes with input handling
+- 🎚️ Sliders (e.g. for FPS limit)
+- 🧩 Modular & clean Lua API
+- ⚡ Easy integration via `loadstring`
+
+---
+
+## 📦 Installation
+
+To install, simply require the library via HTTP GET and `require` it:
 
 ```lua
-local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/KitsuBogdan/Roblox/refs/heads/main/Libraries/NoNameGUI/Library"))()
+local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/KitsuBogdan/Roblox/main/Libraries/NoNameGUI/Library"))()
 local GuiLib = require(lib)
 ````
 
-This code fetches and initializes the GUI library as `GuiLib`.
-
 ---
 
-## 2. Create the GUI Window
-
-Initialize the main GUI window with a custom name (this name is for your reference):
+## 🛠️ Example Usage
 
 ```lua
 GuiLib.createGui('Gulik_Library')
-```
 
----
-
-## 3. Create Tabs
-
-You can add two types of tabs to your GUI window:
-
-* **List Tab** — vertical list style, suitable for menus or grouped items.
-
-```lua
-GuiLib.createListTab("Main")
-```
-
-* **Table Tab** — grid or table style, great for multiple buttons or structured layouts.
-
-```lua
-GuiLib.createTableTab("table")
-```
-
----
-
-## 4. Add Elements to Tabs
-
-### 4.1 Label
-
-Add a simple static text label inside a tab:
-
-```lua
-GuiLib.CreateLabel("Hello from guldell(creator)", "Main")
-```
-
----
-
-### 4.2 Buttons (Click Buttons)
-
-Add clickable buttons with callbacks.
-
-* Using an inline anonymous function:
-
-```lua
-GuiLib.createClickBtn("Hello World", "Main", function()
-    print("Hello from MyTab!")
-end)
-```
-
-* Using a predefined function:
-
-```lua
-function helloworld()
-    print("Hello from MyTab!")
-end
-
-GuiLib.createClickBtn("Hello World func", "Main", helloworld)
-```
-
----
-
-### 4.3 Toggle
-
-Add a toggle switch with default state and a callback triggered on toggle:
-
-```lua
-local infJumpEnabled = false
-
-GuiLib.createToggle("Inf Jump", "Main", false, function(state)
-    infJumpEnabled = state
-    print("Inf Jump toggled:", state)
-end)
-```
-
-Example usage — infinite jump implementation with the toggle:
-
-```lua
-game:GetService("UserInputService").JumpRequest:Connect(function()
-    if infJumpEnabled then
-        local character = game.Players.LocalPlayer.Character
-        if character then
-            local humanoid = character:FindFirstChildOfClass("Humanoid")
-            if humanoid then
-                humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-            end
-        end
-    end
-end)
-```
-
----
-
-### 4.4 Textbox
-
-Add a textbox input box with placeholder text, default value, and a callback when the user types something:
-
-```lua
-GuiLib.createTextbox("Type your name here...", "Main", "", function(text)
-    print("User typed:", text)
-end)
-```
-
----
-
-## 5. Multiple Buttons Example in Table Tab
-
-You can add many buttons quickly inside a tab, here is an example:
-
-```lua
-GuiLib.createTableTab("table")
-
-for i = 1, 3 do
-    GuiLib.createClickBtn("Hello World", "table", function()
-        print("Hello from MyTab!")
-    end)
-end
-```
-
----
-
-## 6. Summary of Available Functions
-
-| Function                                                                                             | Parameters                                      | Description                       |
-| ---------------------------------------------------------------------------------------------------- | ----------------------------------------------- | --------------------------------- |
-| `createGui(name: string)`                                                                            | `name`: GUI window name                         | Creates the main GUI window       |
-| `createListTab(name: string)`                                                                        | `name`: tab name                                | Creates a vertical list tab       |
-| `createTableTab(name: string)`                                                                       | `name`: tab name                                | Creates a table/grid style tab    |
-| `CreateLabel(text: string, tab: string)`                                                             | `text`: label text, `tab`: target tab           | Adds a label to the specified tab |
-| `createClickBtn(text: string, tab: string, callback: function)`                                      | Button text, tab name, callback function        | Adds a clickable button           |
-| `createToggle(text: string, tab: string, default: boolean, callback: function(state: boolean))`      | Toggle label, tab name, default state, callback | Adds a toggle switch              |
-| `createTextbox(placeholder: string, tab: string, default: string, callback: function(text: string))` | Placeholder, tab name, default text, callback   | Adds a textbox input              |
-
----
-
-## 7. Full Example Script
-
-Here’s a complete example to demonstrate usage:
-
-```lua
-local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/KitsuBogdan/Roblox/refs/heads/main/Libraries/NoNameGUI/Library"))()
-local GuiLib = require(lib)
-
-GuiLib.createGui('Gulik_Library')
+-- Create a list-style tab
 GuiLib.createListTab("Main")
 
-GuiLib.CreateLabel("Hello from guldell(creator)", "Main")
+-- Add a label
+GuiLib.CreateLabel("Hello from guldell (creator)", "Main")
 
+-- Add clickable buttons
 GuiLib.createClickBtn("Hello World", "Main", function()
     print("Hello from MyTab!")
 end)
 
-function helloworld()
+-- Using a named function
+function helloWorld()
     print("Hello from MyTab!")
 end
+GuiLib.createClickBtn("Hello World func", "Main", helloWorld)
 
-GuiLib.createClickBtn("Hello World func", "Main", helloworld)
-
+-- Toggle button (e.g. for Infinite Jump)
 local infJumpEnabled = false
-
 GuiLib.createToggle("Inf Jump", "Main", false, function(state)
     infJumpEnabled = state
     print("Inf Jump toggled:", state)
 end)
 
+-- Handle infinite jump behavior
 game:GetService("UserInputService").JumpRequest:Connect(function()
     if infJumpEnabled then
         local character = game.Players.LocalPlayer.Character
@@ -196,29 +73,71 @@ game:GetService("UserInputService").JumpRequest:Connect(function()
     end
 end)
 
+-- Textbox for user input
 GuiLib.createTextbox("Type your name here...", "Main", "", function(text)
     print("User typed:", text)
 end)
 
+-- NEW: Slider (e.g. FPS limit)
+GuiLib.createSlider("FPS Limit", "Main", 60, function(value)
+    print("FPS Limit set to", value)
+end)
+
+-- Create a table-style tab
 GuiLib.createTableTab("table")
 
-for i = 1, 3 do
-    GuiLib.createClickBtn("Hello World", "table", function()
-        print("Hello from MyTab!")
-    end)
-end
+-- Add buttons on table tab
+GuiLib.createClickBtn("Hello World", "table", function()
+    print("Hello from table!")
+end)
 ```
 
 ---
 
-## 8. Troubleshooting & Notes
+## 📄 API Reference
 
-* Ensure your Roblox executor supports `loadstring` and `HttpGet` functions.
-* The GUI will be created inside Roblox’s `PlayerGui`.
-* You can create multiple tabs and add any supported elements as needed.
-* Callbacks execute in the local player context.
-* Customize element texts and tab names freely.
+### 🧱 Basic Setup
+
+| Function               | Description                       |
+| ---------------------- | --------------------------------- |
+| `createGui(name)`      | Initializes the main GUI window   |
+| `createListTab(name)`  | Creates a vertical list-style tab |
+| `createTableTab(name)` | Creates a grid/table-style tab    |
+
+### 🔘 UI Elements
+
+| Function                                                 | Description                                           |
+| -------------------------------------------------------- | ----------------------------------------------------- |
+| `CreateLabel(text, tabName)`                             | Adds a static text label to a specified tab           |
+| `createClickBtn(text, tabName, callback)`                | Adds a clickable button with a callback function      |
+| `createToggle(text, tabName, default, callback)`         | Adds a toggle switch with initial state and callback  |
+| `createTextbox(placeholder, tabName, default, callback)` | Adds a textbox with placeholder and input callback    |
+| `createSlider(label, tabName, defaultValue, callback)`   | Adds a slider control with initial value and callback |
 
 ---
 
-Thank you for using NoName GUI Library! For any issues or feature requests, please open an issue on the GitHub repo.
+## 📌 Notes
+
+* The GUI is local to the player/client and runs on the client side.
+* Designed to be modular, extendable, and fast to implement in any Roblox game or hub.
+* Callbacks receive current values and execute instantly on user interaction.
+
+---
+
+## 🙏 Credits
+
+Created by **guldell** (GitHub: [KitsuBogdan](https://github.com/KitsuBogdan))
+
+---
+
+## 📅 Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
+
+---
+
+## 📬 Contact / Support
+
+For questions or help, open an issue on GitHub or reach out via GitHub Discussions.
+
+---
