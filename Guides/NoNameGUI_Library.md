@@ -9,8 +9,7 @@ This guide explains how to use the **NoNameGUI Library** for Roblox to create si
 Load and require the library in your LocalScript:
 
 ```lua
-local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/KitsuBogdan/Roblox/main/Libraries/NoNameGUI/Library"))()
-local GuiLib = require(lib)
+local GuiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/KitsuBogdan/Roblox/main/Libraries/NoNameGUI/Library"))
 ````
 
 ---
