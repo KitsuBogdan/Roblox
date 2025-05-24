@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.1.1] - 2025-05-24
+
+### Fixed
+
+- 🛠️ Fixed draggable GUI bug (the window could not be dragged).
+- 🐞 Resolved other minor internal bugs for smoother UI behavior.
+
+---
+
 ## [1.1.0] - 2025-05-24
 
 ### Added
@@ -44,7 +53,8 @@ All notable changes to this project will be documented in this file.
 ## Notes
 
 - Initial public release in `v1.0.0`.
-- `v1.1.0` brings quality-of-life UI controls like sliders.
+- `v1.1.0` added slider UI controls.
+- `v1.1.1` focused on improving UI stability and bug fixes.
 
 ---
 
