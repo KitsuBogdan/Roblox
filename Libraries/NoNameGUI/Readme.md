@@ -1,6 +1,3 @@
-Sure! Here's the **full, detailed `README.md`** for your Roblox GUI library with all sections included, formatted nicely in Markdown:
-
-````markdown
 # NoNameGUI Library for Roblox
 
 A lightweight, modular, and easy-to-use GUI library for Roblox developers.  
