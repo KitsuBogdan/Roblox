@@ -117,6 +117,29 @@ end)
 
 ---
 
+## 🎨 Theme Customization
+
+You can customize the overall look of your GUI by selecting one of the predefined color themes.
+
+### How to apply a theme:
+
+1. After creating the GUI with `createGui()`, set the `GuiLib.Theme` property to one of the available themes.
+2. Available themes include:
+   `purple`, `red`, `blue`, `green`, `orange`, `pink`, `gray`, `white`, `black`.
+
+### Example:
+
+```lua
+GuiLib.createGui('Gulik_Library')
+
+-- Set the theme to red
+GuiLib.Theme = GuiLib.Themes.red
+```
+
+This will update the GUI colors instantly, applying the selected theme palette for backgrounds, buttons, toggles, sliders, and text.
+
+---
+
 ## 📌 Notes
 
 * The GUI is **client-side only**, visible and functional only for the local player.
