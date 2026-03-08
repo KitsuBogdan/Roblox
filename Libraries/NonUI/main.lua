@@ -1004,23 +1004,28 @@ function module:CreateWindow(title, themeName)
 			label.Name = "Label_" .. text:sub(1, 10)
 			label.Text = text
 			label.Size = UDim2.new(1, -10, 0, 0)
-			label.BackgroundTransparency = 1
+			label.BackgroundTransparency = 0
+			label.BackgroundColor3 = CurrentTheme.Element
 			label.TextColor3 = CurrentTheme.Text
 			label.TextXAlignment = Enum.TextXAlignment.Left
 			label.Font = Enum.Font.GothamBold
 			label.TextSize = 20
 			label.TextWrapped = true
 			label.AutomaticSize = Enum.AutomaticSize.Y
-
 			label:SetAttribute("ThemeText", "Text")
+			label:SetAttribute("ThemeBackground", "Element")
+			
+			addUICorner(label, 5)
+			addUIStroke(label, CurrentTheme.Stroke)
+
 
 			local padding = Instance.new("UIPadding", label)
 			padding.PaddingLeft = UDim.new(0, 8)
 			padding.PaddingRight = UDim.new(0, 8)
 			
 			local accentBar = Instance.new("Frame", label)
-			accentBar.Size = UDim2.new(0, 3, 1, -6)
-			accentBar.Position = UDim2.new(0, -3, 0, 3)
+			accentBar.Size = UDim2.new(0, 4, 1, 0)
+			accentBar.Position = UDim2.new(0, -9, 0, 0)
 			accentBar.BackgroundColor3 = CurrentTheme.Accent
 			accentBar.BorderSizePixel = 0
 			accentBar.BackgroundTransparency = 0.1
