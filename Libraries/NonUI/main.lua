@@ -162,6 +162,16 @@ end
 
 -- HELPERS
 
+local function roundToStep(value, step)
+	local precision = 0
+	if step < 1 then
+		-- Визначаємо кількість знаків після коми
+		precision = math.ceil(math.abs(math.log10(step)))
+	end
+	local mult = 10 ^ precision
+	return math.floor(value * mult + 0.5) / mult
+end
+
 local function addUICorner(instance, radius)
 	local c = Instance.new("UICorner")
 	c.CornerRadius = UDim.new(0, radius)
@@ -1256,7 +1266,8 @@ function module:CreateWindow(title, themeName)
 			local buttonSize = isMobile and 50 or 40
 			local textSize = isMobile and 20 or 18
 			local height = isMobile and 110 or 95
-
+			
+			
 			local val = flags[objId.. "_val"] or defaultValue
 			val = math.clamp(val, min, max)
 			
@@ -1379,7 +1390,8 @@ function module:CreateWindow(title, themeName)
 					)
 
 					local raw = min + (max - min) * percent
-					val = math.clamp(math.floor(raw / step + 0.5) * step, min, max)
+					local steppedVal = math.floor(raw / step + 0.5) * step
+					val = math.clamp(roundToStep(steppedVal, step), min, max)
 
 					updateVisual(false)
 				end
@@ -1389,7 +1401,7 @@ function module:CreateWindow(title, themeName)
 				local holding = true
 
 				local function change()
-					val = math.clamp(val + (step * direction), min, max)
+					val = math.clamp(roundToStep(val + (step * direction), step), min, max)
 					updateVisual(true)
 				end
 
@@ -1428,7 +1440,8 @@ function module:CreateWindow(title, themeName)
 			valueBox.FocusLost:Connect(function()
 				local number = tonumber(valueBox.Text)
 				if number then
-					val = math.clamp(math.floor(number / step + 0.5) * step, min, max)
+					local steppedVal = math.floor(number / step + 0.5) * step
+					val = math.clamp(roundToStep(steppedVal, step), min, max)
 					updateVisual(true)
 				else
 					valueBox.Text = tostring(val)
