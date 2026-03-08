@@ -786,37 +786,64 @@ function module:CreateWindow(title, themeName)
 	function window:Notify(text, duration)
 		duration = duration or 3
 
+		local sound = Instance.new("Sound")
+		sound.SoundId = "rbxassetid://139162619516355"
+		sound.Volume = 0.5
+		sound.Parent = game:GetService("SoundService")
+		sound:Play()
+		game:GetService("Debris"):AddItem(sound, 2)
+
 		local n = Instance.new("Frame", notifyHolder)
-		n.Size = UDim2.new(1,0,0,60)
+		n.Size = UDim2.new(1, 0, 0, 0)
 		n.BackgroundColor3 = CurrentTheme.Element
 		n.BackgroundTransparency = 1
+		n.ClipsDescendants = true
 		n.AutomaticSize = Enum.AutomaticSize.Y
-		n:SetAttribute("ThemeBackground","Element")
+		n:SetAttribute("ThemeBackground", "Element")
 
-		addUICorner(n,12)
-		addUIStroke(n)
+		addUICorner(n, 12)
+		local stroke = addUIStroke(n)
+		stroke.Transparency = 1
 
 		local lbl = Instance.new("TextLabel", n)
-		lbl.Size = UDim2.new(1,-20,1,0)
-		lbl.Position = UDim2.new(0,10,0,0)
+		lbl.Size = UDim2.new(1, -30, 0, 0)
+		lbl.Position = UDim2.new(0, 15, 0, 0)
 		lbl.BackgroundTransparency = 1
 		lbl.Text = text
 		lbl.TextWrapped = true
 		lbl.Font = Enum.Font.GothamMedium
-		lbl.TextSize = 15
+		lbl.TextSize = 14
 		lbl.TextColor3 = CurrentTheme.Text
-		lbl:SetAttribute("ThemeText","Text")
+		lbl.TextTransparency = 1
+		lbl.AutomaticSize = Enum.AutomaticSize.Y
+		lbl:SetAttribute("ThemeText", "Text")
 
+		local padding = Instance.new("UIPadding", n)
+		padding.PaddingBottom = UDim.new(0, 12)
+		padding.PaddingTop = UDim.new(0, 12)
 
-		tween(n,0.25,{
-			BackgroundTransparency = 0
-		}):Play()
+		local bar = Instance.new("Frame", n)
+		bar.Size = UDim2.new(1, 0, 0, 2)
+		bar.Position = UDim2.new(0, 0, 1, -2)
+		bar.BackgroundColor3 = CurrentTheme.Accent
+		bar.BorderSizePixel = 0
+		bar:SetAttribute("ThemeBackground", "Accent")
 
-		task.delay(duration,function()
-			tween(n,0.25,{
-				BackgroundTransparency = 1
-			}):Play()
-			task.wait(0.25)
+		tween(n, 0.3, {BackgroundTransparency = 0}):Play()
+		tween(lbl, 0.3, {TextTransparency = 0}):Play()
+		tween(stroke, 0.3, {Transparency = 0}):Play()
+		tween(bar, duration, {Size = UDim2.new(0, 0, 0, 2)}):Play()
+
+		task.delay(duration, function()
+			local close = tween(n, 0.3, {
+				BackgroundTransparency = 1,
+				Size = UDim2.new(1, 0, 0, 0)
+			})
+			tween(lbl, 0.2, {TextTransparency = 1}):Play()
+			tween(stroke, 0.2, {Transparency = 1}):Play()
+
+			close:Play()
+			close.Completed:Wait()
 			n:Destroy()
 		end)
 	end
@@ -942,47 +969,45 @@ function module:CreateWindow(title, themeName)
 		function elements:AddLabel(text: string)
 			local parent = self.Container or page
 
-			-- Створення об'єкта
+
 			local label = Instance.new("TextLabel")
 			label.Name = "Label_" .. text:sub(1, 10)
 			label.Parent = parent
 
-			-- Налаштування стилю
+
 			label.Text = text
-			label.Size = UDim2.new(1, -10, 0, 0) -- Висота 0, бо AutomaticSize її розширить
+			label.Size = UDim2.new(1, -10, 0, 0)
 			label.BackgroundTransparency = 1
 			label.TextColor3 = CurrentTheme.Text
 			label.TextXAlignment = Enum.TextXAlignment.Left
 			label.Font = Enum.Font.GothamBold
-			label.TextSize = 20 -- 25 може бути завеликим для мобілок, 20-22 зазвичай ідеал
-			label.TextWrapped = true -- Дозволяємо перенос тексту
+			label.TextSize = 20
+			label.TextWrapped = true
 			label.AutomaticSize = Enum.AutomaticSize.Y
 
-			-- Темування
-			label:SetAttribute("ThemeText", "Text") -- Виправив з Accent на Text, зазвичай лейбли просто білі
+			label:SetAttribute("ThemeText", "Text")
 
-			-- Додаємо правильний відступ зліва (замість пробілів)
 			local padding = Instance.new("UIPadding")
 			padding.PaddingLeft = UDim.new(0, 8)
 			padding.PaddingRight = UDim.new(0, 8)
 			padding.Parent = label
+			
+			local accentBar = Instance.new("Frame", label)
+			accentBar.Size = UDim2.new(0, 2, 0.8, 0)
+			accentBar.Position = UDim2.new(0, 0, 0.1, 0)
+			accentBar.BackgroundColor3 = CurrentTheme.Accent
+			accentBar.BorderSizePixel = 0
 
-			-- Об'єкт для повернення
 			local labObj = {
 				Object = label,
 				Text = text
 			}
 
-			-- Покращений метод оновлення
-			function labObj:Set(newText: string)
-				self.Text = newText
-				label.Text = newText
-			end
-
-			-- Метод для видалення (корисно для динамічних інтерфейсів)
-			function labObj:Destroy()
-				label:Destroy()
-				labObj = nil
+			function labObj:Set(newText)
+				for i = 1, #newText do
+					label.Text = newText:sub(1, i)
+					task.wait(0.05)
+				end
 			end
 
 			return labObj
