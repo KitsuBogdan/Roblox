@@ -1043,7 +1043,7 @@ function module:CreateWindow(title, themeName)
 			grad.Rotation = 90
 			grad.Color = ColorSequence.new({
 				ColorSequenceKeypoint.new(0, CurrentTheme.Accent),
-				ColorSequenceKeypoint.new(1, CurrentTheme.Acccent:Lerp(Color3.new(1,1,1),0.25))
+				ColorSequenceKeypoint.new(1, CurrentTheme.Accent:Lerp(Color3.new(1,1,1),0.25))
 			})
 
 			local labObj = {
