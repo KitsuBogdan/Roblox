@@ -796,7 +796,7 @@ function module:CreateWindow(title, themeName)
 		local n = Instance.new("Frame")
 		n.Parent = notifyHolder
 		n.Size = UDim2.new(1,0,0,0)
-		n.Position = UDim2.new(1,20,0,0) -- start outside
+		n.Position = UDim2.new(1,20,0,0)
 		n.BackgroundColor3 = CurrentTheme.Element
 		n.BackgroundTransparency = 1
 		n.ClipsDescendants = true
@@ -835,14 +835,14 @@ function module:CreateWindow(title, themeName)
 
 		local padding = Instance.new("UIPadding")
 		padding.Parent = n
-		padding.PaddingBottom = UDim.new(0,14)
+		padding.PaddingBottom = UDim.new(0,16)
 		padding.PaddingTop = UDim.new(0,14)
 		padding.PaddingRight = UDim.new(0,12)
 
 		local barBg = Instance.new("Frame")
 		barBg.Parent = n
 		barBg.Size = UDim2.new(1,0,0,2)
-		barBg.Position = UDim2.new(0,0,1,-2)
+		barBg.Position = UDim2.new(0,0,1,-1)
 		barBg.BackgroundColor3 = CurrentTheme.Accent
 		barBg.BackgroundTransparency = 0.8
 		barBg.BorderSizePixel = 0
@@ -854,7 +854,6 @@ function module:CreateWindow(title, themeName)
 		bar.BorderSizePixel = 0
 		bar:SetAttribute("ThemeBackground","Accent")
 
-		-- OPEN ANIMATION
 		tween(n,0.35,{
 			BackgroundTransparency = 0.05,
 			Position = UDim2.new(0,0,0,0)
@@ -864,7 +863,6 @@ function module:CreateWindow(title, themeName)
 		tween(icon,0.35,{ImageTransparency = 0}):Play()
 		tween(stroke,0.35,{Transparency = 0.7}):Play()
 
-		-- PROGRESS BAR
 		local timerTween = tween(bar,duration,{
 			Size = UDim2.new(0,0,1,0)
 		})
@@ -888,7 +886,6 @@ function module:CreateWindow(title, themeName)
 			repeat task.wait() until not hovering
 		end
 
-		-- CLOSE
 		local close = tween(n,0.35,{
 			BackgroundTransparency = 1,
 			Position = UDim2.new(1,20,0,0)
