@@ -165,7 +165,6 @@ end
 local function roundToStep(value, step)
 	local precision = 0
 	if step < 1 then
-		-- Визначаємо кількість знаків після коми
 		precision = math.ceil(math.abs(math.log10(step)))
 	end
 	local mult = 10 ^ precision
@@ -173,9 +172,8 @@ local function roundToStep(value, step)
 end
 
 local function addUICorner(instance, radius)
-	local c = Instance.new("UICorner")
+	local c = Instance.new("UICorner", instance)
 	c.CornerRadius = UDim.new(0, radius)
-	c.Parent = instance
 end
 local function rippleEffect(button)
 	if not button then return end
@@ -192,7 +190,7 @@ local function rippleEffect(button)
 		if debounce then return end
 		debounce = true
 
-		local ripple = Instance.new("Frame")
+		local ripple = Instance.new("Frame", button)
 		ripple.BackgroundColor3 = CurrentTheme.Accent
 		ripple.BackgroundTransparency = 0.6
 		ripple.BorderSizePixel = 0
@@ -204,7 +202,6 @@ local function rippleEffect(button)
 		local relativeY = clickPos.Y - button.AbsolutePosition.Y
 
 		ripple.Position = UDim2.fromOffset(relativeX, relativeY)
-		ripple.Parent = button
 
 		addUICorner(ripple, 999)
 
@@ -230,11 +227,10 @@ local function rippleEffect(button)
 	end)
 end
 local function addUIStroke(instance, color, thickness)
-	local s = Instance.new("UIStroke")
+	local s = Instance.new("UIStroke", instance)
 	s.Color = color or CurrentTheme.Stroke
 	s.Thickness = thickness or 1
 	s.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	s.Parent = instance
 	s:SetAttribute("ThemeColor", "Stroke")
 	return s
 end
@@ -302,7 +298,7 @@ function module:CreateWindow(title, themeName)
 
 	CurrentTheme = Themes[themeName] or Themes.Dark
 
-	local fileName = tostring(module.UName):gsub("%W", "") .. ".json" -- ТАК САМО ЯК У SAVE
+	local fileName = tostring(module.UName):gsub("%W", "") .. ".json"
 	flags = {}
 
 	if isSaveble and type(readfile) == "function" then
@@ -316,9 +312,8 @@ function module:CreateWindow(title, themeName)
 		end
 	end
 
-	local gui = Instance.new("ScreenGui")
+	local gui = Instance.new("ScreenGui", (gethui and gethui()) or game.CoreGui or plr.PlayerGui)
 	gui.Name = httpService:GenerateGUID(false)
-	gui.Parent = (gethui and gethui()) or game.CoreGui or plr.PlayerGui
 	gui.IgnoreGuiInset = true
 	gui.ResetOnSpawn = true
 
@@ -362,8 +357,7 @@ function module:CreateWindow(title, themeName)
 	titleL.TextXAlignment = Enum.TextXAlignment.Left
 	titleL:SetAttribute("ThemeText","Accent")
 
-	local contentGroup = Instance.new("CanvasGroup")
-	contentGroup.Parent = main
+	local contentGroup = Instance.new("CanvasGroup", main)
 	contentGroup.Size = UDim2.new(1,0,1,-55)
 	contentGroup.Position = UDim2.new(0,0,0,55)
 	contentGroup.BackgroundTransparency = 1
@@ -463,8 +457,7 @@ function module:CreateWindow(title, themeName)
 	------------------------------------------------
 	-- FLOATING OPEN BUTTON (MOBILE)
 	------------------------------------------------
-	local openBtn = Instance.new("TextButton")
-	openBtn.Parent = gui
+	local openBtn = Instance.new("TextButton", gui)
 	openBtn.AnchorPoint = Vector2.new(0.5,0.5)
 	openBtn.Position = UDim2.new(0.5,0,0.5,0)
 	openBtn.Size = UDim2.new(0,0,0,0)
@@ -493,7 +486,7 @@ function module:CreateWindow(title, themeName)
 			if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
 				dragging = true
 				dragStart = input.Position
-				startPos = openBtn.Position -- Беремо поточну позицію (Scale та Offset)
+				startPos = openBtn.Position
 			end
 		end)
 
@@ -501,11 +494,10 @@ function module:CreateWindow(title, themeName)
 			if dragging and (input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement) then
 				local delta = input.Position - dragStart
 
-				-- Розраховуємо нові координати, зберігаючи Scale, але змінюючи Offset
 				local newX = startPos.X.Offset + delta.X
 				local newY = startPos.Y.Offset + delta.Y
 
-				-- Обмеження, щоб не вилітало за екран (використовуємо AbsoluteSize батьківського GUI)
+
 				local parentSize = gui.AbsoluteSize
 				newX = math.clamp(newX, -openBtn.AbsolutePosition.X + openBtn.Position.X.Offset, parentSize.X - openBtn.AbsoluteSize.X)
 				newY = math.clamp(newY, -openBtn.AbsolutePosition.Y + openBtn.Position.Y.Offset, parentSize.Y - openBtn.AbsoluteSize.Y)
@@ -521,11 +513,8 @@ function module:CreateWindow(title, themeName)
 		end)
 	end
 
-	------------------------------------------------
-	-- HEADER MIN BUTTON
-	------------------------------------------------
-	local minBtn = Instance.new("TextButton")
-	minBtn.Parent = header
+	local minBtn = Instance.new("TextButton", header)
+	minBtn.Name = "min_btn"
 	minBtn.Size = UDim2.new(0,40,0,40)
 	minBtn.Position = UDim2.new(1,-90,0,7)
 	minBtn.Text = "−"
@@ -687,16 +676,16 @@ function module:CreateWindow(title, themeName)
 	------------------------------------------------
 
 
-	local sidebar = Instance.new("Frame")
-	sidebar.Parent = contentGroup
+	local sidebar = Instance.new("Frame", contentGroup)
+	sidebar.Name = "Sidebar"
 	sidebar.Size = UDim2.new(0,200,1,0)
 	sidebar.Position = UDim2.new(0,0,0,0)
 	sidebar.BackgroundColor3 = CurrentTheme.Sidebar
 	sidebar:SetAttribute("ThemeBackground","Sidebar")
 	addUICorner(sidebar, 12)
 
-	local lgLayout = Instance.new("UIListLayout")
-	lgLayout.Parent = sidebar
+	local lgLayout = Instance.new("UIListLayout", sidebar)
+	lgLayout.Name = "layout"
 	lgLayout.FillDirection = Enum.FillDirection.Vertical
 	lgLayout.Padding = UDim.new(0,6)
 	lgLayout:SetAttribute("ThemeRole","None")
@@ -705,14 +694,15 @@ function module:CreateWindow(title, themeName)
 	excFolder.Name = "excludeFold"
 	
 	local accentBar = Instance.new("Frame", excFolder)
+	accentBar.Name = "accentBar"
 	accentBar.BackgroundColor3 = CurrentTheme.Accent
 	accentBar:SetAttribute("ThemeBackground", "Accent")
 	accentBar.Size = UDim2.new(0,8,0,25)
 	accentBar.Position = UDim2.new(0,5,0,10)
 	addUICorner(accentBar, 12)
 
-	local container = Instance.new("Frame")
-	container.Parent = contentGroup
+	local container = Instance.new("Frame", contentGroup)
+	container.Name = "Container"
 	container.Size = UDim2.new(1,-200,1,0)
 	container.Position = UDim2.new(0,203,0,0)
 	container.BackgroundTransparency = 1
@@ -720,8 +710,8 @@ function module:CreateWindow(title, themeName)
 	lgLayout:SetAttribute("ThemeRole","container")
 
 
-	local pageLayout = Instance.new("UIPageLayout")
-	pageLayout.Parent = container
+	local pageLayout = Instance.new("UIPageLayout", container)
+	pageLayout.Name = "pageLayout"
 	pageLayout.Padding = UDim.new(0,5)
 	pageLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	pageLayout.TweenTime = 0.25
@@ -734,16 +724,16 @@ function module:CreateWindow(title, themeName)
 	-- NOTIFY HOLDER
 	------------------------------------------------
 
-	local notifyHolder = Instance.new("Frame")
-	notifyHolder.Parent = gui
+	local notifyHolder = Instance.new("Frame", gui)
+	notifyHolder.Name = "NotifyHolder"
 	notifyHolder.Size = UDim2.new(0,300,1,-20)
 	notifyHolder.Position = UDim2.new(1,-320,0,10)
 	notifyHolder.BackgroundTransparency = 1
 	notifyHolder:SetAttribute("ThemeRole","None")
 
 
-	local layout = Instance.new("UIListLayout")
-	layout.Parent = notifyHolder
+	local layout = Instance.new("UIListLayout", notifyHolder)
+	layout.Name = "layout" 
 	layout.Padding = UDim.new(0,10)
 	layout.VerticalAlignment = Enum.VerticalAlignment.Bottom
 	layout:SetAttribute("ThemeRole","None")
@@ -783,20 +773,21 @@ function module:CreateWindow(title, themeName)
 		}):Play()
 	end
 
-	function window:Notify(text, duration)
+	function window:Notify(text, duration, link)
 		duration = duration or 3
-
+		link = link or "rbxassetid://10734950309"
+		
 		task.spawn(function()
 
-			local sound = Instance.new("Sound")
+			local sound = Instance.new("Sound", game:GetService("SoundService"))
+			sound.Name = "NotifySound"
 			sound.SoundId = "rbxassetid://139162619516355"
 			sound.Volume = 0.5
-			sound.Parent = game:GetService("SoundService")
 			sound:Play()
 			game:GetService("Debris"):AddItem(sound, 2)
 
-			local n = Instance.new("Frame")
-			n.Parent = notifyHolder
+			local n = Instance.new("Frame",notifyHolder)
+			n.Name = "Notify"
 			n.Size = UDim2.new(1,0,0,0)
 			n.Position = UDim2.new(1,20,0,0)
 			n.BackgroundColor3 = CurrentTheme.Element
@@ -808,20 +799,20 @@ function module:CreateWindow(title, themeName)
 			addUICorner(n,10)
 
 			local stroke = addUIStroke(n)
+			stroke.Name = "NotifyStroke"
 			stroke.Transparency = 1
 			stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
-			local icon = Instance.new("ImageLabel")
-			icon.Parent = n
+			local icon = Instance.new("ImageLabel", n)
 			icon.Size = UDim2.new(0,20,0,20)
 			icon.Position = UDim2.new(0,12,0,12)
 			icon.BackgroundTransparency = 1
-			icon.Image = "rbxassetid://10734950309"
+			icon.Image = link
 			icon.ImageColor3 = CurrentTheme.Accent
 			icon.ImageTransparency = 1
 
-			local lbl = Instance.new("TextLabel")
-			lbl.Parent = n
+			local lbl = Instance.new("TextLabel", n)
+			lbl.Name = "NotifyText"
 			lbl.Size = UDim2.new(1,-50,0,0)
 			lbl.Position = UDim2.new(0,42,0,12)
 			lbl.BackgroundTransparency = 1
@@ -835,22 +826,22 @@ function module:CreateWindow(title, themeName)
 			lbl.AutomaticSize = Enum.AutomaticSize.Y
 			lbl:SetAttribute("ThemeText","Text")
 
-			local padding = Instance.new("UIPadding")
-			padding.Parent = n
+			local padding = Instance.new("UIPadding", n)
+			padding.Name = "UIPadding"
 			padding.PaddingBottom = UDim.new(0,16)
 			padding.PaddingTop = UDim.new(0,14)
 			padding.PaddingRight = UDim.new(0,12)
 
-			local barBg = Instance.new("Frame")
-			barBg.Parent = n
+			local barBg = Instance.new("Frame", n)
+			barBg.Name = "BarBackground"
 			barBg.Size = UDim2.new(1,0,0,2)
-			barBg.Position = UDim2.new(0,0,1,-1)
+			barBg.Position = UDim2.new(0,-3,1,-1)
 			barBg.BackgroundColor3 = CurrentTheme.Accent
 			barBg.BackgroundTransparency = 0.8
 			barBg.BorderSizePixel = 0
 
-			local bar = Instance.new("Frame")
-			bar.Parent = barBg
+			local bar = Instance.new("Frame", barBg)
+			bar.Name = "Bar"
 			bar.Size = UDim2.new(1,0,1,0)
 			bar.BackgroundColor3 = CurrentTheme.Accent
 			bar.BorderSizePixel = 0
@@ -1027,8 +1018,7 @@ function module:CreateWindow(title, themeName)
 			padding.PaddingLeft = UDim.new(0, 8)
 			padding.PaddingRight = UDim.new(0, 8)
 			
-			local accentBar = Instance.new("Frame")
-			accentBar.Parent = label
+			local accentBar = Instance.new("Frame", label)
 			accentBar.Size = UDim2.new(0, 3, 1, -6)
 			accentBar.Position = UDim2.new(0, -3, 0, 3)
 			accentBar.BackgroundColor3 = CurrentTheme.Accent
@@ -1038,14 +1028,12 @@ function module:CreateWindow(title, themeName)
 
 			addUICorner(accentBar, 3)
 
-			local grad = Instance.new("UIGradient")
-			grad.Parent = accentBar
+			local grad = Instance.new("UIGradient",accentBar)
 			grad.Rotation = 90
 			grad.Color = ColorSequence.new({
 				ColorSequenceKeypoint.new(0, CurrentTheme.Accent),
-				ColorSequenceKeypoint.new(1, CurrentTheme.Accent:Lerp(Color3.new(1,1,1),0.25))
+				ColorSequenceKeypoint.new(1, CurrentTheme.Accent:Lerp(Color3.new(1,1,1), 0.25))
 			})
-
 			local labObj = {
 				Object = label,
 				Text = text
@@ -1914,6 +1902,7 @@ function module:CreateWindow(title, themeName)
 
 			local parent = self.Container or page
 			local frame = Instance.new("Frame", parent)
+			frame.Name = title
 			frame.Size = UDim2.new(1, -10, 0, 0)
 			frame.AutomaticSize = Enum.AutomaticSize.Y
 			frame.BackgroundColor3 = CurrentTheme.Element
@@ -1923,14 +1912,16 @@ function module:CreateWindow(title, themeName)
 			addUIStroke(frame)
 
 			local layout = Instance.new("UIListLayout", frame)
+			layout.Name = "UIListLayout"
 			layout.Padding = UDim.new(0,8)
 			layout.SortOrder = Enum.SortOrder.LayoutOrder
 			
 			local padding0 = Instance.new("UIPadding", frame)
-			padding0.Parent = frame
+			padding0.Name = "padding0"
 			padding0.PaddingBottom = UDim.new(0,10)
 
 			local titleLabel = Instance.new("TextLabel", frame)
+			titleLabel.Name = "Title"
 			titleLabel.Size = UDim2.new(1,-20,0,34)
 			titleLabel.BackgroundTransparency = 1
 			titleLabel.Text = title
@@ -1946,18 +1937,21 @@ function module:CreateWindow(title, themeName)
 			padding1.Name = "textPadding"
 			
 			local separator = Instance.new("Frame", frame)
+			separator.Name = "Separator"
 			separator.Size = UDim2.new(1.2,-20,0,1)
 			separator.BackgroundColor3 = Color3.fromRGB(60,60,70)
 			separator.BorderSizePixel = 0
 			separator.LayoutOrder = 2
 
 			local container = Instance.new("Frame", frame)
+			container.Name = "Container"
 			container.Size = UDim2.new(1,0,0,0)
 			container.AutomaticSize = Enum.AutomaticSize.Y
 			container.BackgroundTransparency = 1
 			container.LayoutOrder = 3
 
 			local containerLayout = Instance.new("UIListLayout", container)
+			containerLayout.Name = "UIListLayout"
 			containerLayout.Padding = UDim.new(0,6)
 			containerLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 			containerLayout.SortOrder = Enum.SortOrder.LayoutOrder
