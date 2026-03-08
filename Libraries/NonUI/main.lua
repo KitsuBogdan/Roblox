@@ -939,27 +939,52 @@ function module:CreateWindow(title, themeName)
 		end)
 
 		local elements = {}
-		function elements:AddLabel(text : string)
+		function elements:AddLabel(text: string)
 			local parent = self.Container or page
-			local label = Instance.new("TextLabel", parent)
-			local labObj = {Object = label, Text = text}
-			
-			label.Text = "  " .. text
-			label.Size = UDim2.new(1, -10, 0, 25)
-			label.BackgroundColor3 = CurrentTheme.Accent
+
+			-- Створення об'єкта
+			local label = Instance.new("TextLabel")
+			label.Name = "Label_" .. text:sub(1, 10)
+			label.Parent = parent
+
+			-- Налаштування стилю
+			label.Text = text
+			label.Size = UDim2.new(1, -10, 0, 0) -- Висота 0, бо AutomaticSize її розширить
 			label.BackgroundTransparency = 1
 			label.TextColor3 = CurrentTheme.Text
 			label.TextXAlignment = Enum.TextXAlignment.Left
 			label.Font = Enum.Font.GothamBold
-			label.TextSize = 25
+			label.TextSize = 20 -- 25 може бути завеликим для мобілок, 20-22 зазвичай ідеал
+			label.TextWrapped = true -- Дозволяємо перенос тексту
 			label.AutomaticSize = Enum.AutomaticSize.Y
-			label:SetAttribute("ThemeText", "Accent")
 
-			function labObj:Set(newText)
-				label.Text = "  " .. newText
-				labObj.Text = newText
+			-- Темування
+			label:SetAttribute("ThemeText", "Text") -- Виправив з Accent на Text, зазвичай лейбли просто білі
+
+			-- Додаємо правильний відступ зліва (замість пробілів)
+			local padding = Instance.new("UIPadding")
+			padding.PaddingLeft = UDim.new(0, 8)
+			padding.PaddingRight = UDim.new(0, 8)
+			padding.Parent = label
+
+			-- Об'єкт для повернення
+			local labObj = {
+				Object = label,
+				Text = text
+			}
+
+			-- Покращений метод оновлення
+			function labObj:Set(newText: string)
+				self.Text = newText
+				label.Text = newText
 			end
-			
+
+			-- Метод для видалення (корисно для динамічних інтерфейсів)
+			function labObj:Destroy()
+				label:Destroy()
+				labObj = nil
+			end
+
 			return labObj
 		end
 		
