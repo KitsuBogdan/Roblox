@@ -793,37 +793,35 @@ function module:CreateWindow(title, themeName)
 		sound:Play()
 		game:GetService("Debris"):AddItem(sound, 2)
 
-		local n = Instance.new("Frame", notifyHolder)
-		n.Size = UDim2.new(1, 0, 0, 0)
+		local n = Instance.new("Frame")
+		n.Parent = notifyHolder
+		n.Size = UDim2.new(1,0,0,0)
+		n.Position = UDim2.new(1,20,0,0) -- start outside
 		n.BackgroundColor3 = CurrentTheme.Element
 		n.BackgroundTransparency = 1
 		n.ClipsDescendants = true
 		n.AutomaticSize = Enum.AutomaticSize.Y
-		n:SetAttribute("ThemeBackground", "Element")
+		n:SetAttribute("ThemeBackground","Element")
 
-		addUICorner(n, 10)
+		addUICorner(n,10)
+
 		local stroke = addUIStroke(n)
 		stroke.Transparency = 1
 		stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
-		local gradient = Instance.new("UIGradient", n)
-		gradient.Color = ColorSequence.new({
-			ColorSequenceKeypoint.new(0, Color3.new(1, 1, 1)),
-			ColorSequenceKeypoint.new(1, Color3.fromRGB(240, 240, 240))
-		})
-		gradient.Rotation = 45
-
-		local icon = Instance.new("ImageLabel", n)
-		icon.Size = UDim2.new(0, 20, 0, 20)
-		icon.Position = UDim2.new(0, 12, 0, 12)
+		local icon = Instance.new("ImageLabel")
+		icon.Parent = n
+		icon.Size = UDim2.new(0,20,0,20)
+		icon.Position = UDim2.new(0,12,0,12)
 		icon.BackgroundTransparency = 1
-		icon.Image = "rbxassetid://10734950309" -- Іконка інфо
+		icon.Image = "rbxassetid://10734950309"
 		icon.ImageColor3 = CurrentTheme.Accent
 		icon.ImageTransparency = 1
 
-		local lbl = Instance.new("TextLabel", n)
-		lbl.Size = UDim2.new(1, -50, 0, 0)
-		lbl.Position = UDim2.new(0, 42, 0, 0)
+		local lbl = Instance.new("TextLabel")
+		lbl.Parent = n
+		lbl.Size = UDim2.new(1,-50,0,0)
+		lbl.Position = UDim2.new(0,42,0,12)
 		lbl.BackgroundTransparency = 1
 		lbl.Text = text
 		lbl.TextWrapped = true
@@ -833,47 +831,77 @@ function module:CreateWindow(title, themeName)
 		lbl.TextTransparency = 1
 		lbl.TextXAlignment = Enum.TextXAlignment.Left
 		lbl.AutomaticSize = Enum.AutomaticSize.Y
-		lbl:SetAttribute("ThemeText", "Text")
+		lbl:SetAttribute("ThemeText","Text")
 
-		local padding = Instance.new("UIPadding", n)
-		padding.PaddingBottom = UDim.new(0, 14)
-		padding.PaddingTop = UDim.new(0, 14)
-		padding.PaddingRight = UDim.new(0, 12)
+		local padding = Instance.new("UIPadding")
+		padding.Parent = n
+		padding.PaddingBottom = UDim.new(0,14)
+		padding.PaddingTop = UDim.new(0,14)
+		padding.PaddingRight = UDim.new(0,12)
 
-		local barBg = Instance.new("Frame", n)
-		barBg.Size = UDim2.new(1, 0, 0, 2)
-		barBg.Position = UDim2.new(0, 0, 1, -2)
+		local barBg = Instance.new("Frame")
+		barBg.Parent = n
+		barBg.Size = UDim2.new(1,0,0,2)
+		barBg.Position = UDim2.new(0,0,1,-2)
 		barBg.BackgroundColor3 = CurrentTheme.Accent
 		barBg.BackgroundTransparency = 0.8
 		barBg.BorderSizePixel = 0
 
-		local bar = Instance.new("Frame", barBg)
-		bar.Size = UDim2.new(1, 0, 1, 0)
+		local bar = Instance.new("Frame")
+		bar.Parent = barBg
+		bar.Size = UDim2.new(1,0,1,0)
 		bar.BackgroundColor3 = CurrentTheme.Accent
 		bar.BorderSizePixel = 0
-		bar:SetAttribute("ThemeBackground", "Accent")
+		bar:SetAttribute("ThemeBackground","Accent")
 
-		tween(n, 0.4, {BackgroundTransparency = 0.05, Size = UDim2.new(1, 0, 0, 0)}):Play()
-		tween(lbl, 0.4, {TextTransparency = 0}):Play()
-		tween(icon, 0.4, {ImageTransparency = 0}):Play()
-		tween(stroke, 0.4, {Transparency = 0.8}):Play()
+		-- OPEN ANIMATION
+		tween(n,0.35,{
+			BackgroundTransparency = 0.05,
+			Position = UDim2.new(0,0,0,0)
+		}):Play()
 
-		local t = tween(bar, duration, {Size = UDim2.new(0, 0, 1, 0)})
-		t:Play()
+		tween(lbl,0.35,{TextTransparency = 0}):Play()
+		tween(icon,0.35,{ImageTransparency = 0}):Play()
+		tween(stroke,0.35,{Transparency = 0.7}):Play()
 
-		task.delay(duration, function()
-			local close = tween(n, 0.4, {
-				BackgroundTransparency = 1,
-				Size = UDim2.new(1, 0, 0, 0)
-			})
-			tween(lbl, 0.3, {TextTransparency = 1}):Play()
-			tween(icon, 0.3, {ImageTransparency = 1}):Play()
-			tween(stroke, 0.3, {Transparency = 1}):Play()
+		-- PROGRESS BAR
+		local timerTween = tween(bar,duration,{
+			Size = UDim2.new(0,0,1,0)
+		})
+		timerTween:Play()
 
-			close:Play()
-			close.Completed:Wait()
-			n:Destroy()
+		local hovering = false
+
+		n.MouseEnter:Connect(function()
+			hovering = true
+			timerTween:Pause()
 		end)
+
+		n.MouseLeave:Connect(function()
+			hovering = false
+			timerTween:Play()
+		end)
+
+		timerTween.Completed:Wait()
+
+		if hovering then
+			repeat task.wait() until not hovering
+		end
+
+		-- CLOSE
+		local close = tween(n,0.35,{
+			BackgroundTransparency = 1,
+			Position = UDim2.new(1,20,0,0)
+		})
+
+		tween(lbl,0.25,{TextTransparency = 1}):Play()
+		tween(icon,0.25,{ImageTransparency = 1}):Play()
+		tween(stroke,0.25,{Transparency = 1}):Play()
+
+		close:Play()
+		close.Completed:Wait()
+
+		n:Destroy()
 	end
 
 	function window:GetFlags()
