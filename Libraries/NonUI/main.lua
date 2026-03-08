@@ -1009,12 +1009,8 @@ function module:CreateWindow(title, themeName)
 		function elements:AddLabel(text: string)
 			local parent = self.Container or page
 
-
-			local label = Instance.new("TextLabel")
+			local label = Instance.new("TextLabel", parent)
 			label.Name = "Label_" .. text:sub(1, 10)
-			label.Parent = parent
-
-
 			label.Text = text
 			label.Size = UDim2.new(1, -10, 0, 0)
 			label.BackgroundTransparency = 1
@@ -1027,16 +1023,28 @@ function module:CreateWindow(title, themeName)
 
 			label:SetAttribute("ThemeText", "Text")
 
-			local padding = Instance.new("UIPadding")
+			local padding = Instance.new("UIPadding", label)
 			padding.PaddingLeft = UDim.new(0, 8)
 			padding.PaddingRight = UDim.new(0, 8)
-			padding.Parent = label
 			
-			local accentBar = Instance.new("Frame", label)
-			accentBar.Size = UDim2.new(0, 2, 0.8, 0)
-			accentBar.Position = UDim2.new(0, 0, 0.1, 0)
+			local accentBar = Instance.new("Frame")
+			accentBar.Parent = label
+			accentBar.Size = UDim2.new(0, 3, 1, -6)
+			accentBar.Position = UDim2.new(0, -3, 0, 3)
 			accentBar.BackgroundColor3 = CurrentTheme.Accent
 			accentBar.BorderSizePixel = 0
+			accentBar.BackgroundTransparency = 0.1
+			accentBar:SetAttribute("ThemeBackground","Accent")
+
+			addUICorner(accentBar, 3)
+
+			local grad = Instance.new("UIGradient")
+			grad.Parent = accentBar
+			grad.Rotation = 90
+			grad.Color = ColorSequence.new({
+				ColorSequenceKeypoint.new(0, CurrentTheme.Accent),
+				ColorSequenceKeypoint.new(1, CurrentTheme.Acccent:Lerp(Color3.new(1,1,1),0.25))
+			})
 
 			local labObj = {
 				Object = label,
