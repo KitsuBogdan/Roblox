@@ -5,7 +5,7 @@ local httpService = game:GetService("HttpService")
 local runService = game:GetService("RunService")
 local plr = game.Players.LocalPlayer
 module.UId = nil
-module.I = {Release = 1, Version = "1.0.0", Creator = "Noname Hub"}
+module.I = {Release = 1, Version = "1.3.5", Creator = "Noname Hub"}
 
 local writefile = writefile or false
 local isfile = isfile or false
