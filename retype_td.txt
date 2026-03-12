@@ -1,4 +1,7 @@
-cloudflare loader
-cloudflare page
+cloudflare loader, library, page:
+https://loader.nonamescr.workers.dev/
+https://library.nonamescr.workers.dev/
+https://nonamehub.pages.dev/
+
 discord post
 ...
