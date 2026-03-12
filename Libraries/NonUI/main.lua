@@ -707,13 +707,13 @@ function module:Init(UId)
 	if not writefile and not readfile then return end
 	
 	local fold = false
-	if isfolder and not isfolder(folderName) then
-		make_folder(folderName)
-		fold = true
-	elseif not listfiles()[folderName] then
-		make_folder(folderName)
-		fold = true
-	end
+	-- if isfolder and not isfolder(folderName) then
+	-- 	make_folder(folderName)
+	-- 	fold = true
+	-- elseif not listfiles()[folderName] then
+	-- 	make_folder(folderName)
+	-- 	fold = true
+	-- end
 	local configPath = fold and folderName..module.UName or module.UName
 	isSaveble = true
 end
