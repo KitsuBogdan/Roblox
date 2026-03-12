@@ -1,9 +1,8 @@
 --! Local-only configuration — this config is embedded within the project and cannot be loaded dynamically via loadstring or remote URLs (like GitHub raw files).
 
---! platoboost configuration(library)
-local service = 1234;  -- your service id, this is used to identify your service.
-local secret = "a1b2c3-a1b2c3d4-a1b2c3d4e5f6";  -- make sure to obfuscate this if you want to ensure security.
-local useNonce = true;  -- use a nonce to prevent replay attacks and request tampering.
+local service = ChangeThis;  -- your service id, this is used to identify your service. int
+local secret = "ChangeThis";  -- make sure to obfuscate this if you want to ensure security. string
+local useNonce = true;  -- use a nonce to prevent replay attacks and request tampering. boolean
 
 local onMessage = function(message,title) 
     game:GetService("StarterGui"):SetCore("SendNotification", {
