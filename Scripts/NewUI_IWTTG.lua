@@ -1,3 +1,9 @@
+local Lib = loadstring(game:HttpGet("https://library.nonamescr.workers.dev/"))()
+
+Lib:Init("IWTTGame_NNHub")
+local Window = Lib:CreateWindow("Noname Hub", "Dark")
+
+
 local plr = game.Players.LocalPlayer
 local map = workspace:FindFirstChild("Map")
 local npcFolder = workspace:FindFirstChild("NPCs")
@@ -6,6 +12,8 @@ local stage1 = map.Stage.LavaStage
 local stage2 = map.Stage.LavaStage2
 local stage3 = map.Stage.Stage3
 local stage4 = map.Stage.Stage4
+
+Window.Notify("Welcome "..plr.Name, 5, {icon = Lib.lucide_icons.send})
 
 -- == Helpful functions == --
 local function destroy (obj)
@@ -16,12 +24,12 @@ local function destroy (obj)
 	end
 end
 local function createTempPlatform()
-	local pTemplate = stage1:Clone()
+	local mPlatform = stage4["Moving Platform"]
+	local pTemplate = mPlatform:Clone()
 	pTemplate.Name = "SafePlatform"
 	pTemplate.Material = Enum.Material.SmoothPlastic
 	pTemplate.BrickColor = BrickColor.new("Bright green")
 	pTemplate.Transparency = 0.3
-	pTemplate.Parent = game.ReplicatedStorage
 	
 	return pTemplate
 end
@@ -86,42 +94,39 @@ end
 local bBullets = false
 
 
-function stage3func(index)
-	if index == 1 then
-		if stage3.Lava then
-			stage3.Lava:Destroy()
-		else
-			print("Stage 3 lavas not found")
-		end
-	elseif index == 2 then
-		if stage3:FindFirstChild("Triggers") then
-			stage3.Triggers:Destroy()
-		else
-			print("Stage 3 traps not found")
-		end
-	end
-end
+-- function stage3func(index)
+-- 	if index == 1 then
+-- 		if stage3.Lava then
+-- 			stage3.Lava:Destroy()
+-- 		else
+-- 			print("Stage 3 lavas not found")
+-- 		end
+-- 	elseif index == 2 then
+-- 		if stage3:FindFirstChild("Triggers") then
+-- 			stage3.Triggers:Destroy()
+-- 		else
+-- 			print("Stage 3 traps not found")
+-- 		end
+-- 	end
+-- end
 
-
-local Lib = loadstring(game:HttpGet("https://library.nonamescr.workers.dev/"))()
-
-Lib:Init("IWTTGame_NNHub")
-local Window = Lib:CreateWindow("Noname Hub", "Blue")
 
 -- == Info == --
 local infoTab = Window:AddTab("Info")
-infoTab:AddLabel("Welcome",plr.Name)
+infoTab:AddLabel("Welcome "..plr.Name)
 infoTab:AddLabel("UI and scripts:", "Noname Hub")
 infoTab:AddLabel("Motivated to update from beta by: gddreamslenderman")
-infoTab:AddLabel("Unofficial and non-public release: 3; Date: 2026-07-03")
 infoTab:AddLabel("Warning: May contain vulnerabilities and bugs")
-infoTab:AddLabel("Version: 2.0.0")
-
+infoTab:AddLabel("Version: 2.0.1")
 
 -- == Quick Menu == --
 local quickTab = Window:AddTab("Quick Menu")
 
+local bsize
 local quickTabBBSection = quickTab:AddSection("Big Bullets")
+quickTabBBSection:AddSlider("Bullet Size",0.5,4,2,0.1,function(value)
+	bsize = Vector3.new(value,value,value)
+end)
 quickTabBBSection:AddToggle("Toggle", function(state)
 	bBullets = state
 end)
@@ -154,13 +159,28 @@ quickTabGlobalSection:AddButton("Delete all traps and spikes", function()
 end)
 
 quickTabGlobalSection:AddButton("1hp all NPC's", function()
-	warn("1hp all NPC's")
+	local NPCs = findNPCsWithLevels()
+	if NPCs then
+		for _, npc in pairs(NPCs) do
+			if npc.Instance then 
+				local stats : Folder = npc.Instance:FindFirstChild("Stats")
+				stats:SetAttribute("health", 1)
+			end
+		end
+	end
 end)
 
 quickTabGlobalSection:AddButton("Kill all NPC's", function()
-	warn("Kill all NPC's")
+	local NPCs = findNPCsWithLevels()
+	if NPCs then
+		for _, npc in pairs(NPCs) do
+			if npc.Instance then 
+				local stats : Folder = npc.Instance:FindFirstChild("Stats")
+				stats:SetAttribute("health", 0)
+			end
+		end
+	end
 end)
-
 
 quickTabGlobalSection:AddButton("Create paths", function()
 	createPlatform({22.999, -0.697, 307}, {0,0,0}, {20, 1.4, 20})
@@ -437,3 +457,12 @@ bossesTab:AddButton("Safe lava", function()
 		part:Destroy()
 	end
 end)
+
+local tParts = workspace.TempPart
+tParts.ChildAdded:Connect(function(tempPart)
+	if tempPart:IsA("BasePart") and tempPart.Name == "Part" and bBullets == true then
+		tempPart.Size =	bsize
+	end
+end)
+
+Window.Notify("Script loaded successfully! ", 5, {icon = Lib.lucide_icons.info})
