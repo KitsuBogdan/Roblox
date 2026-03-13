@@ -36,7 +36,7 @@ To use **Non UI**, ensure your environment meets the following requirements:
 Simply copy and paste this loadstring into your executor:
 
 ```lua
-local NonUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/KitsuBogdan/Roblox/refs/heads/main/Libraries/NonUI/main.lua"))()
+local NonUI = loadstring(game:HttpGet("https://github.com/KitsuBogdan/Roblox/blob/Beta/Libraries/NonUI/main.lua"))()
 
 -- Your script logic goes here
 ```
@@ -90,7 +90,7 @@ Methods available within each **Tab** to add interactive components.
 ## 🖥️ Usage
 
 ```lua
-local NonUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/KitsuBogdan/Roblox/refs/heads/main/Libraries/NonUI/main.lua"))()
+local NonUI = loadstring(game:HttpGet("https://github.com/KitsuBogdan/Roblox/blob/Beta/Libraries/NonUI/main.lua"))()
 
 -- 1. Initialize with a Unique ID for Auto-Saving
 NonUI:Init("MyUniqueProjectID")

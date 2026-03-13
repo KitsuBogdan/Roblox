@@ -1,11 +1,8 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/KitsuBogdan/Roblox/refs/heads/main/Libraries/Platoboost/JSON-Library.lua"))()
-
 --! Local-only configuration — this config is embedded within the project and cannot be loaded dynamically via loadstring or remote URLs (like GitHub raw files).
 
---! platoboost configuration(library)
-local service = 1234;  -- your service id, this is used to identify your service.
-local secret = "a1b2c3-a1b2c3d4-a1b2c3d4e5f6";  -- make sure to obfuscate this if you want to ensure security.
-local useNonce = true;  -- use a nonce to prevent replay attacks and request tampering.
+local service = ChangeThis;  -- your service id, this is used to identify your service. int
+local secret = "ChangeThis";  -- make sure to obfuscate this if you want to ensure security. string
+local useNonce = true;  -- use a nonce to prevent replay attacks and request tampering. boolean
 
 local onMessage = function(message,title) 
     game:GetService("StarterGui"):SetCore("SendNotification", {
@@ -257,30 +254,3 @@ local getFlag = function(name)
         return nil;
     end
 end
-
-local plrs = game:GetService("Players")
-local plr = plrs.LocalPlayer
-local gui = plr.PlayerGui.ScreenGui
-local getBtn = gui.GetButton
-local checkBtn = gui.CheckButton
-local keyBox = gui.KeyBox
-
-getBtn.MouseButton1Click:Connect(function()
-    copyLink()
-end)
-
-checkBtn.MouseButton1Click:Connect(function()
-    local key = keyBox.Text
-    if key == "" then
-        onMessage("Please enter a key to check.")
-        return
-    end
-
-    local valid = verifyKey(key)
-    if valid then
-        onMessage("Key is valid. Loading...")
-        loadstring(game:HttpGet("https://raw.githubusercontent/KitsuBogdan/..."))()
-    else
-        onMessage("Key is invalid or could not be activated.")
-    end
-end)
