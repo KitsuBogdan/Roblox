@@ -1,5 +1,9 @@
 # 🎮 Roblox Projects by Guldell
 
+## 🛠 Our Team
+* **Me** — Founder & Lead Developer (Luau, JS, UI/UX Design)
+* **Zk** — Administrator & Discord Management & Lead Bot Creator
+
 Welcome to my Roblox repository!
 ## 🔍 What's Inside
 
@@ -15,4 +19,4 @@ Created and maintained by **Guldell**, also known as **Noname Scripts**
 ---
 
 ##### My old UIs:
-###### **GulikHub** and **MM2Hub**
+**GulikHub** and **MM2Hub**
